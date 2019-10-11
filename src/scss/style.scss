@@ -154,6 +154,28 @@ form {
     background: #fff;
     .tabela-cotacao{
     }
+
+    .nav-pills{
+        border: 1px solid #000;
+        background: rgba(0, 0, 0, 0.845);
+    }
+
+    #pills-tabContent{
+        padding:1rem ;
+        border: 1px solid #000;
+        background: rgba(0, 0, 0, 0.845);
+    }
+
+    select, input, label, small{
+        color: #fff;
+        border: 1px solid #000;
+        background: transparent;
+    }
+
+    .aviso{
+        font-size: 12px;
+        color: rgb(255, 0, 0);
+    }
 }
 
 /***** Youtube Lazyload *****/

@@ -114,6 +114,20 @@ form textarea {
 
 #cotacao {
   background: #fff; }
+  #cotacao .nav-pills {
+    border: 1px solid #000;
+    background: rgba(0, 0, 0, 0.845); }
+  #cotacao #pills-tabContent {
+    padding: 1rem;
+    border: 1px solid #000;
+    background: rgba(0, 0, 0, 0.845); }
+  #cotacao select, #cotacao input, #cotacao label, #cotacao small {
+    color: #fff;
+    border: 1px solid #000;
+    background: transparent; }
+  #cotacao .aviso {
+    font-size: 12px;
+    color: red; }
 
 /***** Youtube Lazyload *****/
 .embed-responsive-16by9::before {
