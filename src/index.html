@@ -1,3 +1,21 @@
+<?php
+    require_once 'vendor/autoload.php';
+
+    $headers = array('Accept' => 'application/json');
+    $query = array('foo' => 'hello', 'bar' => 'world');
+    
+    $cotacoes = Unirest\Request::get('http://gerenciadordecambio.tk/api/cotacoes/3', $headers, $query);
+    $cotacoes = $cotacoes->body;
+
+    $pacotes = Unirest\Request::get('http://gerenciadordecambio.tk/api/turismo/3', $headers, $query);
+    $pacotes = $pacotes->body;
+
+    $servicos = Unirest\Request::get('http://gerenciadordecambio.tk/api/servicos/3', $headers, $query);
+    $servicos = $servicos->body;
+	
+	// $noticias = Unirest\Request::get('http://gerenciadordecambio.tk/api/noticias/3', $headers, $query);
+    // $noticias = $noticias->body;
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -7,7 +25,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Template Landing Bootstrap - Sensorial</title>
+    <title>Template Default Câmbio - Usaqui</title>
 
     <!-- build:css -->
     <link rel="stylesheet" href="css/bootstrap/css/bootstrap.min.css">
@@ -15,6 +33,7 @@
     <!-- endbuild -->
 
     <!-- build:css2 -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/icons.css">
     <link rel="stylesheet" href="css/style.css">
     <!-- endbuild -->
@@ -27,7 +46,8 @@
 
         <div class="contato contato-phone">
 
-            <a href="#" onclick="window.open(this.href,'newwindow', 'width=450, height=344'); return false;">
+            <a data-scroll-ignore href="#"
+                onclick="window.open(this.href,'newwindow', 'width=450, height=344'); return false;">
                 <div class="container-icon">
                     <i class="icon-phone"></i>
                 </div>
@@ -38,7 +58,7 @@
 
         <div class="contato contato-phone">
 
-            <a href="#tel://2100000000" onclick="">
+            <a data-scroll-ignore href="#tel://2100000000" onclick="">
                 <div class="container-icon">
                     <i class="icon-phone"></i>
                 </div>
@@ -48,7 +68,7 @@
 
         </div>
 
-        <div class="contato contato-whatsapp">
+        <div data-scroll-ignore class="contato contato-whatsapp">
 
             <a href="https://api.whatsapp.com/send?phone=552100000000" onclick="">
                 <div class="container-icon">
@@ -60,7 +80,7 @@
 
         </div>
 
-        <div class="contato contato-email">
+        <div data-scroll-ignore class="contato contato-email">
 
             <a href="#formulario" onclick="">
                 <div class="container-icon">
@@ -72,7 +92,7 @@
 
         </div>
 
-        <div class="contato contato-chat">
+        <div data-scroll-ignore class="contato contato-chat">
 
             <a href="#" onclick="window.open(this.href,'newwindow', 'width=510, height=580'); return false;">
                 <div class="container-icon">
@@ -84,7 +104,7 @@
 
         </div>
 
-        <div class="contato contato-waze">
+        <div data-scroll-ignore class="contato contato-waze">
 
             <a href="#" onclick="">
                 <div class="container-icon">
@@ -98,7 +118,7 @@
 
     </div>
 
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <nav data-scroll-header class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 
         <div class="container">
 
@@ -139,20 +159,10 @@
 
     </nav>
 
-    <header>
-        <div class="container-fluid m-0 p-0">
-            <div class="col-md-12 m-0 p-0">
-                <img class="img-fluid" src="http://placehold.it/2000x925/f99d1f/fff?text=Fachada"
-                    alt="Nome do Projeto - Fachada">
-            </div>
-        </div>
-    </header>
-
-    <section id="cotacao" class="section">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-8 tabela-cotacao">
+    <header id="hero">
+        <div class="container h-100 hero-container">
+            <div class="row d-flex align-items-center">
+                <div class="col-md-6 tabela-cotacao">
                     <table cellpadding="0" cellspacing="0" width="100%" border="0">
                         <tbody>
                             <tr>
@@ -165,156 +175,39 @@
                                     style="font-size: 13px; color: #999; font-weight: bold; text-align: center; padding-bottom: 10px;">
                                     Venda</td>
                             </tr>
+                            <?php foreach($cotacoes as $cotacao){ ?>
                             <tr style="border-bottom:1px #ccc solid;">
                                 <td style="padding:10px 0 10px 0;">
                                     <span style="float: left;">
-                                        <img src="http://gerenciadordecambio.tk/images/moeda/thumb/dolar_americano.png"
-                                            alt="Imagem Dólar Americano" width="38" height="20"
-                                            style="width: 38px !important; height: 20px !important;">
+                                        <img src="http://gerenciadordecambio.tk/images/moeda/thumb/<?php echo  $cotacao->coin->imagem;  ?>"
+                                            alt="Imagem <?php echo $cotacao->coin->nome; ?>" width="38" height="20"
+                                            style="width: 38px !important; height: 20px !important;" />
                                     </span>
 
                                     <span style="float: left; padding-left: 12px;">
-                                        <b>Dólar Americano</b>
+                                        <b><?php echo $cotacao->coin->nome; ?></b>
                                     </span>
                                 </td>
                                 <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    3.60</td>
+                                    <?php echo number_format($cotacao->compra,2); ?></td>
                                 <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    4.27</td>
+                                    <?php echo number_format($cotacao->venda,2); ?></td>
                             </tr>
-                            <tr style="border-bottom:1px #ccc solid;">
-                                <td style="padding:10px 0 10px 0;">
-                                    <span style="float: left;">
-                                        <img src="http://gerenciadordecambio.tk/images/moeda/thumb/euro.png"
-                                            alt="Imagem Euro" width="38" height="20"
-                                            style="width: 38px !important; height: 20px !important;">
-                                    </span>
-
-                                    <span style="float: left; padding-left: 12px;">
-                                        <b>Euro</b>
-                                    </span>
-                                </td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    4.10</td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    4.85</td>
-                            </tr>
-                            <tr style="border-bottom:1px #ccc solid;">
-                                <td style="padding:10px 0 10px 0;">
-                                    <span style="float: left;">
-                                        <img src="http://gerenciadordecambio.tk/images/moeda/thumb/libra.png"
-                                            alt="Imagem Libra" width="38" height="20"
-                                            style="width: 38px !important; height: 20px !important;">
-                                    </span>
-
-                                    <span style="float: left; padding-left: 12px;">
-                                        <b>Libra</b>
-                                    </span>
-                                </td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    4.65</td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    5.60</td>
-                            </tr>
-                            <tr style="border-bottom:1px #ccc solid;">
-                                <td style="padding:10px 0 10px 0;">
-                                    <span style="float: left;">
-                                        <img src="http://gerenciadordecambio.tk/images/moeda/thumb/dolar_australiano.png"
-                                            alt="Imagem Dólar Australiano" width="38" height="20"
-                                            style="width: 38px !important; height: 20px !important;">
-                                    </span>
-
-                                    <span style="float: left; padding-left: 12px;">
-                                        <b>Dólar Australiano</b>
-                                    </span>
-                                </td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    2.55</td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    3.07</td>
-                            </tr>
-                            <tr style="border-bottom:1px #ccc solid;">
-                                <td style="padding:10px 0 10px 0;">
-                                    <span style="float: left;">
-                                        <img src="http://gerenciadordecambio.tk/images/moeda/thumb/dolar_canadense.png"
-                                            alt="Imagem Dólar Canadense" width="38" height="20"
-                                            style="width: 38px !important; height: 20px !important;">
-                                    </span>
-
-                                    <span style="float: left; padding-left: 12px;">
-                                        <b>Dólar Canadense</b>
-                                    </span>
-                                </td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    2.78</td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    3.42</td>
-                            </tr>
-                            <tr style="border-bottom:1px #ccc solid;">
-                                <td style="padding:10px 0 10px 0;">
-                                    <span style="float: left;">
-                                        <img src="http://gerenciadordecambio.tk/images/moeda/thumb/suico.png"
-                                            alt="Imagem Franco Suiço" width="38" height="20"
-                                            style="width: 38px !important; height: 20px !important;">
-                                    </span>
-
-                                    <span style="float: left; padding-left: 12px;">
-                                        <b>Franco Suiço</b>
-                                    </span>
-                                </td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    3.68</td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    4.58</td>
-                            </tr>
-                            <tr style="border-bottom:1px #ccc solid;">
-                                <td style="padding:10px 0 10px 0;">
-                                    <span style="float: left;">
-                                        <img src="http://gerenciadordecambio.tk/images/moeda/thumb/argentina.png"
-                                            alt="Imagem Peso Argentino" width="38" height="20"
-                                            style="width: 38px !important; height: 20px !important;">
-                                    </span>
-
-                                    <span style="float: left; padding-left: 12px;">
-                                        <b>Peso Argentino</b>
-                                    </span>
-                                </td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    0.05</td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    0.12</td>
-                            </tr>
-                            <tr style="border-bottom:1px #ccc solid;">
-                                <td style="padding:10px 0 10px 0;">
-                                    <span style="float: left;">
-                                        <img src="http://gerenciadordecambio.tk/images/moeda/thumb/chile.png"
-                                            alt="Imagem Peso Chileno" width="38" height="20"
-                                            style="width: 38px !important; height: 20px !important;">
-                                    </span>
-
-                                    <span style="float: left; padding-left: 12px;">
-                                        <b>Peso Chileno</b>
-                                    </span>
-                                </td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    0.01</td>
-                                <td style="text-align: center; padding:7px 0 7px 0;">R$
-                                    0.01</td>
-                            </tr>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="col-md-4 ml-auto">
+                <div class="col-md-6 box-cambio">
 
                     <ul class="nav nav-pills nav-justified" id="pills-tab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home"
-                                role="tab" aria-controls="pills-home" aria-selected="true">COMPRAR</a>
+                            <a class="nav-link active" id="compra-tab" data-toggle="pill" href="#pills-home" role="tab"
+                                aria-controls="pills-home" aria-selected="true" data-scroll-ignore>COMPRAR</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile"
-                                role="tab" aria-controls="pills-profile" aria-selected="false">VENDER</a>
+                            <a class="nav-link" id="venda-tab" data-toggle="pill" href="#pills-profile" role="tab"
+                                aria-controls="pills-profile" aria-selected="false" data-scroll-ignore>VENDER</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
@@ -334,15 +227,15 @@
                                         <label for="inputPassword4">Escolha sua moeda:</label>
                                         <select id="moeda" name="moeda" required
                                             class="form-control rounded simular-comprar">
-                                            @foreach(App\Models\Cotacao::all() as $cotacao)
-                                            <option data-especie="{{ number_format($cotacao->venda,2) }}"
-                                                data-cartao="{{ number_format($cotacao->venda_cartao,2) }}"
-                                                data-date="{{Carbon\Carbon::parse($cotacao->created_at)->format('d/m/Y') }}"
-                                                data-time="{{Carbon\Carbon::parse($cotacao->created_at)->format('d/m/Y H:i') }}"
-                                                value="{{$cotacao->id}}">
-                                                {{ $cotacao->moeda->nome }}
+                                            <?php foreach($cotacoes as $cotacao){ ?>
+                                            <option data-especie="<?php  echo number_format($cotacao->venda,2);um  ?>"
+                                                data-cartao="<?php echo number_format($cotacao->venda_cartao,2); ?>"
+                                                data-date="<?php echo $cotacao->created_at; ?>"
+                                                data-time="<?php echo $cotacao->created_at; ?>"
+                                                value="<?php echo $cotacao->coin->id; ?>">
+                                                <?php echo $cotacao->coin->nome; ?>
                                             </option>
-                                            @endforeach
+                                            <?php } ?>
                                         </select>
                                     </div>
                                 </div>
@@ -391,36 +284,38 @@
                                     <div class="form-group col-md-12">
                                         <label for="inputPassword4">Escolha sua moeda:</label>
                                         <select id="moeda-2" required class="form-control rounded simular-vender">
-                                            @foreach(App\Models\Cotacao::all() as $cotacao)
-                                            <option data-especie="{{ number_format($cotacao->compra,2) }}"
-                                                data-cartao="{{ number_format($cotacao->compra_cartao,2) }}"
-                                                data-date="{{Carbon\Carbon::parse($cotacao->created_at)->format('d/m/Y') }}"
-                                                data-time="{{Carbon\Carbon::parse($cotacao->created_at)->format('d/m/Y H:i') }}"
-                                                value="{{$cotacao->id}}">
-                                                {{ $cotacao->moeda->nome }}
+                                            <?php foreach($cotacoes as $cotacao){ ?>
+                                            <option data-especie="<?php echo  number_format($cotacao->compra,2);  ?>"
+                                                data-cartao="<?php echo  number_format($cotacao->compra_cartao,2)  ?>"
+                                                data-date="<?php echo $cotacao->created_at; ?>"
+                                                data-time="<?php echo $cotacao->created_at; ?>"
+                                                value="<?php echo $cotacao->coin->id; ?>">
+                                                <?php echo  $cotacao->coin->nome;  ?>
                                             </option>
-                                            @endforeach
+                                            <?php } ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-xs-12 col-sm-4 col-md-4">
-                                        <small id="emailHelp" class="form-text text-muted">Qntd desejada</small>
+                                        <small id="emailHelp" class="form-text">Qntd desejada</small>
                                         <input id="quantidade-2" name="quantidade-2" type="text"
                                             class="form-control simula-vende" value="500,00" style="text-align:right;"
                                             required>
                                     </div>
                                     <div class="form-group col-xs-12 col-sm-4 col-md-4 text-center mt-3">
                                         <i class="fa fa-exchange fa-4x"></i> <br>
-                                        <small class="form-text text-muted">Taxa = <span id="taxa-2"></span></small>
+                                        <small class="form-text">Taxa = R$ <span id="taxa-2"></span></small>
                                     </div>
                                     <div class="form-group col-xs-12 col-sm-4 col-md-4">
-                                        <small id="emailHelp" class="form-text text-muted">Total em
+                                        <small id="emailHelp" class="form-text">Total em
                                             reais</small>
                                         <input required id="total-2" name="total-2" type="text"
                                             class="form-control simula-vende" value="0,00" style="text-align:right;"
                                             readonly required>
-                                        <span style="color:#f5f5f5;font-size:12px;">*Valor final com IOF</span>
+                                    </div>
+                                    <div class="form-group col-md-12 text-center">
+                                        <span class="aviso">*Valor final com IOF</span>
                                     </div>
                                 </div>
 
@@ -436,24 +331,104 @@
                 </div>
             </div>
         </div>
-    </section>
+    </header>
 
-    <section id="contato" class="section">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-12 text-center">
-
-                    <a href="#" class="btn btn-lg btn-danger text-uppercase" role="button">Quero Mais Informações</a>
-
+    <!-- services -->
+    <section id="sobre" class="section">
+        <div class="social-box">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p class="h2 section-title">Sobre</p>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra, sapien non
+                            fringilla faucibus, leo enim aliquet mauris, sed viverra tellus enim sit amet tortor. Nulla
+                            at metus ut urna tristique sollicitudin eu tincidunt ipsum. Proin rhoncus, lorem vel
+                            dignissim eleifend, lorem sapien molestie eros, a iaculis nulla nibh ut erat. Vestibulum
+                            imperdiet turpis eu ipsum molestie ornare. Donec faucibus magna in leo imperdiet, vel
+                            faucibus massa consequat. Nulla id ex vitae nunc pellentesque faucibus. Integer quis nisl
+                            vitae urna tempus dapibus sit amet vel leo. Etiam non metus sem.</p>
 
+                        <p>Aenean vestibulum turpis ac purus tempor tincidunt. Pellentesque non turpis sed quam
+                            tristique finibus at id felis. Ut porttitor erat quam, id blandit orci venenatis vel. Proin
+                            ullamcorper tortor quis neque sollicitudin, aliquet cursus magna cursus. Vestibulum auctor
+                            lectus at lectus tincidunt, non sodales lorem faucibus. Curabitur id velit vitae risus
+                            dignissim vestibulum. Donec consectetur a nisi malesuada tempor. Donec blandit elit id lorem
+                            fermentum, quis dignissim quam interdum.</p>
+
+                        <p>Donec nec mi vel massa imperdiet iaculis eu et ipsum. Phasellus sit amet libero metus.
+                            Vivamus lorem purus, sodales sed lacus sit amet, cursus vulputate nulla. Nunc dolor mi,
+                            condimentum tempor velit non, pharetra laoreet massa. Fusce vestibulum tempor dolor, et
+                            feugiat nisi egestas a. Suspendisse ornare magna at felis fermentum commodo. Vestibulum
+                            lobortis mauris eget vestibulum tempor. Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit. Fusce ut felis dui. Integer bibendum metus viverra elit dictum varius. Maecenas nulla
+                            nisl, sagittis sit amet accumsan a, rutrum non arcu.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="galeria" class="section">
+    <!-- services -->
+    <section id="services" class="section">
+        <div class="social-box">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p class="h2 section-title">Serviços</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <?php foreach($servicos as $servico){ ?>
+                    <div class="col-lg-4 col-xs-12 text-center">
+                        <div class="box">
+                            <i class="fa fa-behance fa-3x" aria-hidden="true"></i>
+                            <div class="box-title">
+                                <h3><?php echo $servico->titulo ?></h3>
+                            </div>
+                            <div class="box-text">
+                                <span><?php echo $servico->descricao ?></span>
+                            </div>
+                            <div class="box-btn">
+                                <a href="#">Saiba Mais</a>
+                            </div>
+                        </div>
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--==========================
+    Call To Action Section
+    ============================-->
+    <section id="call-to-action">
+        <div class="container wow fadeIn">
+            <div class="row">
+                <div class="col-lg-9 text-center text-lg-left">
+                    <h3 class="cta-title">Call To Action</h3>
+                    <p class="cta-text"> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                        deserunt mollit anim id est laborum.</p>
+                </div>
+                <div class="col-lg-3 cta-btn-container text-center">
+                    <a class="cta-btn align-middle" href="#">Call To Action</a>
+                </div>
+            </div>
+
+        </div>
+    </section><!-- #call-to-action -->
+
+    <!--==========================
+      Portfolio Section
+    ============================-->
+    <section id="portfolio" class="clearfix">
         <div class="container">
+
             <div class="row">
                 <div class="col-md-12 text-center">
                     <p class="h2 section-title">Pacotes de Turismo</p>
@@ -461,52 +436,62 @@
             </div>
 
             <div class="row">
-                <div class="col-md-12 glry-div d-flex flex-wrap align-items-center justify-content-center">
-
-                    <a href="http://via.placeholder.com/1200x600/000/fff">
-                        <img src="http://via.placeholder.com/500x334" alt="" class="img-fluid img-glry">
-                    </a>
-                    <a href="http://via.placeholder.com/1200x600/000/fff">
-                        <img src="http://via.placeholder.com/500x334" alt="" class="img-fluid img-glry">
-                    </a>
-                    <a href="http://via.placeholder.com/1200x600/000/fff">
-                        <img src="http://via.placeholder.com/500x334" alt="" class="img-fluid img-glry">
-                    </a>
-                    <a href="http://via.placeholder.com/1200x600/000/fff">
-                        <img src="http://via.placeholder.com/500x334" alt="" class="img-fluid img-glry">
-                    </a>
-                    <a href="http://via.placeholder.com/1200x600/000/fff">
-                        <img src="http://via.placeholder.com/500x334" alt="" class="img-fluid img-glry">
-                    </a>
-                    <a href="http://via.placeholder.com/1200x600/000/fff">
-                        <img src="http://via.placeholder.com/500x334" alt="" class="img-fluid img-glry">
-                    </a>
-                    <a href="http://via.placeholder.com/1200x600/000/fff">
-                        <img src="http://via.placeholder.com/500x334" alt="" class="img-fluid img-glry">
-                    </a>
-                    <a href="http://via.placeholder.com/1200x600/000/fff">
-                        <img src="http://via.placeholder.com/500x334" alt="" class="img-fluid img-glry">
-                    </a>
-
+                <div class="col-lg-12">
+                    <ul id="portfolio-flters">
+                        <li data-filter="*" class="filter-active">Todos</li>
+                        <li data-filter=".NACIONAL">NACIONAL</li>
+                        <li data-filter=".INTERNACIONAL">INTERNACIONAL</li>
+                        <li data-filter=".CRUZEIRO">CRUZEIRO</li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section id="contato" class="section">
-        <div class="container">
+            <div class="row portfolio-container">
+                <?php foreach($pacotes as $pacote){ ?>
+                <div class="col-lg-4 col-md-6 portfolio-item <?php echo $pacote->tipo ?>">
+                    <div class="portfolio-wrap">
+                        <img src="http://gerenciadordecambio.tk/images/turismo/<?php echo $pacote->imagem ?>"
+                            class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4><a href="#"><?php echo $pacote->titulo ?></a></h4>
+                            <p><?php echo $pacote->descricao ?></p>
+                            <div>
+                                <a href="http://gerenciadordecambio.tk/images/turismo/<?php echo $pacote->imagem ?>"
+                                    data-lightbox="portfolio" data-title="<?php echo $pacote->titulo ?>"
+                                    class="link-preview" title="Preview"><i class="fa fa-eye"></i></a>
+                                <a href="#" class="link-details" title="More Details"><i
+                                        class="fa fa-external-link"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+            </div>
+
+        </div>
+    </section><!-- #portfolio -->
+
+    <!--==========================
+    Call To Action Section
+    ============================-->
+    <section id="call-to-action">
+        <div class="container wow fadeIn">
             <div class="row">
-
-                <div class="col-md-12 text-center">
-
-                    <a href="#" class="btn btn-lg btn-danger text-uppercase" role="button">Quero Mais Informações</a>
-
+                <div class="col-lg-9 text-center text-lg-left">
+                    <h3 class="cta-title">Call To Action</h3>
+                    <p class="cta-text"> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                        deserunt mollit anim id est laborum.</p>
                 </div>
-
+                <div class="col-lg-3 cta-btn-container text-center">
+                    <a class="cta-btn align-middle" href="#">Call To Action</a>
+                </div>
             </div>
-        </div>
-    </section>
 
+        </div>
+    </section><!-- #call-to-action -->
+
+    <!-- youtube video -->
     <section id="video" class="section">
         <div class="container">
             <div class="row">
@@ -521,39 +506,101 @@
         </div>
     </section>
 
-    <section id="construtora" class="section">
+    <!-- construtora -->
+    <section id="instagram" class="section">
         <div class="container">
             <div class="row">
-                <div class="col-md-6 mx-auto">
-                    <p class="h3 text-center">Solicite mais informações</p>
-                    <p class="text-center">Em breve entraremos em contato.</p>
-
-                    <form name="form" class="form-1" method="post" action="envia.php">
-
-                        <input class="form-control" type="text" name="nome-1" placeholder="Digite seu nome"
-                            title="O campo Nome deve ser preenchido" required>
-
-                        <input class="form-control" type="text" name="telefone-1" placeholder="Digite seu telefone"
-                            title="O campo Telefone deve ser preenchido" required>
-
-                        <input class="form-control" type="email" name="email-1" placeholder="Digite seu email"
-                            title="Por favor, preencha com um email válido." required>
-
-                        <textarea class="form-control" type="text" name="mensagem-1" placeholder="Digite sua mensagem"
-                            title="O campo Mensagem deve ser preenchido" data-rule-required="true" rows="4"></textarea>
-
-                        <input type="text" name="honeypot-1" class="honeypot d-none" placeholder="Honeypot">
-
-                        <button type="submit" id="load" class="btn btn-lg btn-primary btn-block text-uppercase"
-                            id="load" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Order">Quero
-                            Mais Informações</button>
-
-                    </form>
+                <div class="col-md-12 text-center">
+                    <p class="h2 section-title">Nosso Instagram</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="instagram-feed1" class="instagram_feed"></div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!--==========================
+      Contact Section
+    ============================-->
+    <section id="contato">
+        <!-- Uncomment below if you wan to use dynamic maps -->
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14693.089337793901!2d-43.189591!3d-22.977011!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb3ff30d7915631d8!2sBertha%20Exchange%20Tour!5e0!3m2!1spt-BR!2sbr!4v1571070328666!5m2!1spt-BR!2sbr"
+            width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+
+        <div class="container mt-5">
+
+            <div class="col-md-12 text-center">
+                <p class="h2 section-title">Contato</p>
+            </div>
+            <div class="row justify-content-center">
+
+                <div class="col-lg-3 col-md-4">
+
+                    <div class="info">
+                        <div>
+                            <i class="fa fa-map-marker"></i>
+                            <p>R. Xavier da Silveira, 22 - Copacabana<br>Rio de Janeiro - RJ, 22061-010</p>
+                        </div>
+
+                        <div>
+                            <i class="fa fa-envelope"></i>
+                            <p>info@example.com</p>
+                        </div>
+
+                        <div>
+                            <i class="fa fa-phone"></i>
+                            <p>+55 21 2504-4052</p>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+                        <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+                        <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
+                        <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+                        <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-5 col-md-8">
+                    <div class="form">
+                        <div id="sendmessage">Your message has been sent. Thank you!</div>
+                        <form name="form" class="form-1" method="post" action="envia.php">
+
+                            <input class="form-control" type="text" name="nome-1" placeholder="Digite seu nome"
+                                title="O campo Nome deve ser preenchido" required>
+
+                            <input class="form-control" type="text" name="telefone-1" placeholder="Digite seu telefone"
+                                title="O campo Telefone deve ser preenchido" required>
+
+                            <input class="form-control" type="email" name="email-1" placeholder="Digite seu email"
+                                title="Por favor, preencha com um email válido." required>
+
+                            <textarea class="form-control" type="text" name="mensagem-1"
+                                placeholder="Digite sua mensagem" title="O campo Mensagem deve ser preenchido"
+                                data-rule-required="true" rows="4"></textarea>
+
+                            <input type="text" name="honeypot-1" class="honeypot d-none" placeholder="Honeypot">
+
+                            <button type="submit" id="load" class="btn btn-lg btn-primary btn-block text-uppercase"
+                                data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Order">Quero
+                                Mais Informações</button>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section><!-- #contact -->
+
+    <!-- footer -->
     <footer class="section">
         <div class="container">
             <div class="row">
@@ -590,13 +637,15 @@
     <script src="js/magnific-popup/jquery.magnific-popup.js"></script>
     <script src="js/scrollPosStyler.js"></script>
     <script src="js/smooth-scroll.polyfills.min.js"></script>
+    <script src="js/isotope.pkgd.min.js"></script>
     <!-- endbuild -->
 
     <!-- build:js3 -->
-    <script src="js/main.js"></script>
     <script src="js/jquery.validate.js"></script>
     <script src="js/jquery.mask.min.js"></script>
     <script src="js/js.cookie.min.js"></script>
+    <script src="js/negociacao.js"></script>
+    <script src="js/main.js"></script>
     <script src="js/envia.js"></script>
     <!-- endbuild -->
 </body>

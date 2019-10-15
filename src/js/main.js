@@ -1,9 +1,24 @@
-ScrollPosStyler.init();
-// var scroll = new SmoothScroll('a[href*="#"]', {
-//   offset: 50,
-//   updateURL: true, // Update the URL on scroll
-// 	popstate: true // Animate scrolling with the forward/backward browser buttons (requires updateURL to be true)
-// });
+// ScrollPosStyler.init();
+var scroll = new SmoothScroll('a[href*="#"]', {
+  header: '[data-scroll-header]',
+	ignore: '[data-scroll-ignore]',
+  offset: 50,
+  updateURL: true, // Update the URL on scroll
+	popstate: true // Animate scrolling with the forward/backward browser buttons (requires updateURL to be true)
+});
+
+// Porfolio isotope and filter
+$(window).on('load', function () {
+  var portfolioIsotope = $('.portfolio-container').isotope({
+    itemSelector: '.portfolio-item'
+  });
+  $('#portfolio-flters li').on( 'click', function() {
+    $("#portfolio-flters li").removeClass('filter-active');
+    $(this).addClass('filter-active');
+
+    portfolioIsotope.isotope({ filter: $(this).data('filter') });
+  });
+});
 
 /***** Magnific Popup ******/
 $('.glry-div').magnificPopup({
